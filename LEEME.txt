@@ -1,0 +1,31 @@
+LANDING — GASTOS PREVIOS A CONSTRUIR EN TU TERRENO
+====================================================
+
+Esta carpeta es SOLO para el ebook:
+"Gastos Previos a Construir en tu Terreno".
+
+Precio configurado: $19.500 ARS
+Link de pago: https://mpago.la/1heNnR9
+Instagram: @lic.cosentino
+Email: cosentino.inmobiliario@gmail.com
+
+NO incluye ni modifica la landing del ebook "Antes de Comprar".
+
+PARA PUBLICAR EN GITHUB PAGES
+-----------------------------
+Si querés mantener ambas páginas separadas dentro del mismo repositorio:
+
+1. Creá una carpeta llamada: gastos-previos
+2. Subí DENTRO de esa carpeta todo el contenido de este paquete:
+   - index.html
+   - styles.css
+   - script.js
+   - config.js
+   - carpeta assets
+3. La dirección quedará:
+   https://carlosbcosentino-source.github.io/lic-cosentino/gastos-previos/
+
+IMPORTANTE
+----------
+No subas el PDF completo que vendés al repositorio público.
+Las imágenes incluidas son únicamente vistas previas de la guía.

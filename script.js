@@ -1,82 +1,57 @@
 (() => {
-  const cfg = window.CB_CONFIG || {};
+  const cfg = window.CB_GASTOS || {};
   const $all = (s) => [...document.querySelectorAll(s)];
 
-  $all('[data-launch]').forEach(el => el.textContent = cfg.launchPrice || '$14.900');
-  $all('[data-regular]').forEach(el => el.textContent = cfg.regularPrice || '$19.900');
-  document.getElementById('year').textContent = new Date().getFullYear();
+  document.querySelectorAll("[data-price]").forEach(el => el.textContent = cfg.price || "$19.500");
+  document.querySelectorAll("[data-currency]").forEach(el => el.textContent = cfg.currency || "ARS");
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-  const configDialog = document.getElementById('configDialog');
-  const imageDialog = document.getElementById('imageDialog');
+  $all(".js-buy").forEach(a => {
+    a.href = cfg.paymentUrl || "#comprar";
+    if (cfg.paymentUrl) {
+      a.target = "_blank";
+      a.rel = "noopener";
+    }
+  });
 
-  $all('.js-buy').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      if (!cfg.paymentUrl || !/^https?:\/\//.test(cfg.paymentUrl)) {
-        e.preventDefault();
-        configDialog.showModal();
-      } else {
-        btn.href = cfg.paymentUrl;
-        btn.target = '_blank';
-        btn.rel = 'noopener';
+  $all(".js-instagram").forEach(a => {
+    a.href = cfg.instagramUrl || "#";
+    if (cfg.instagramUrl) {
+      a.target = "_blank";
+      a.rel = "noopener";
+    }
+  });
+
+  $all(".js-email").forEach(a => {
+    const mail = cfg.contactEmail || "";
+    a.href = mail ? `mailto:${mail}?subject=${encodeURIComponent("Consulta sobre la guía Gastos Previos a Construir")}` : "#";
+  });
+
+  const modal = document.getElementById("previewModal");
+  const modalImg = modal?.querySelector("img");
+  const modalTitle = modal?.querySelector("[data-modal-title]");
+
+  $all(".preview-card").forEach(card => {
+    card.addEventListener("click", () => {
+      if (!modal || !modalImg) return;
+      modalImg.src = card.dataset.image;
+      modalImg.alt = card.dataset.title || "Vista previa";
+      if (modalTitle) modalTitle.textContent = card.dataset.title || "Vista previa";
+      modal.showModal();
+    });
+  });
+
+  modal?.querySelector(".modal-close")?.addEventListener("click", () => modal.close());
+  modal?.addEventListener("click", e => { if (e.target === modal) modal.close(); });
+
+  // Gentle reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("is-visible");
+        io.unobserve(e.target);
       }
     });
-    if (cfg.paymentUrl && /^https?:\/\//.test(cfg.paymentUrl)) {
-      btn.href = cfg.paymentUrl; btn.target = '_blank'; btn.rel='noopener';
-    }
-  });
-
-  const waMessage = encodeURIComponent('Hola Carlos, estoy analizando una operación inmobiliaria y quisiera consultar por una reunión personalizada.');
-  const mailSubject = encodeURIComponent('Consulta inmobiliaria personalizada');
-  const mailBody = encodeURIComponent('Hola Carlos, estoy analizando una operación inmobiliaria y quisiera consultar por una reunión personalizada.');
-  $all('.js-whatsapp').forEach(a => {
-    if (cfg.whatsappNumber) {
-      a.href = `https://wa.me/${cfg.whatsappNumber}?text=${waMessage}`; a.target='_blank'; a.rel='noopener';
-    } else if (cfg.contactEmail) {
-      a.href = `mailto:${cfg.contactEmail}?subject=${mailSubject}&body=${mailBody}`;
-    } else {
-      a.addEventListener('click', e => { e.preventDefault(); configDialog.showModal(); });
-    }
-  });
-
-  $all('.js-email').forEach(a => {
-    if (cfg.contactEmail) { a.href = `mailto:${cfg.contactEmail}`; a.textContent = cfg.contactEmail; }
-    else a.style.display='none';
-  });
-
-  $all('.js-instagram').forEach(a => {
-    if (cfg.instagramUrl) { a.href=cfg.instagramUrl; a.target='_blank'; a.rel='noopener'; }
-    else a.style.display='none';
-  });
-
-  $all('.preview-item').forEach(btn => btn.addEventListener('click', () => {
-    const img = imageDialog.querySelector('img'); img.src = btn.dataset.image; imageDialog.showModal();
-  }));
-
-  $all('.dialog-close').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
-  $all('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d) d.close(); }));
-
-  if (cfg.launchEnds) {
-    const el = document.getElementById('countdown');
-    const end = new Date(cfg.launchEnds + 'T23:59:59-03:00').getTime();
-    const tick = () => {
-      const diff = end - Date.now();
-      if (diff <= 0) { el.hidden = true; return; }
-      const d=Math.floor(diff/86400000), h=Math.floor(diff/3600000)%24, m=Math.floor(diff/60000)%60;
-      el.textContent = `Precio lanzamiento disponible por ${d}d ${h}h ${m}m`;
-      el.hidden = false;
-    };
-    tick(); setInterval(tick,60000);
-  }
-
-  // Optional Meta Pixel
-  if (cfg.metaPixelId) {
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init',cfg.metaPixelId); fbq('track','PageView');
-  }
-
-  // Optional Google Analytics 4
-  if (cfg.gaMeasurementId) {
-    const s=document.createElement('script'); s.async=true; s.src=`https://www.googletagmanager.com/gtag/js?id=${cfg.gaMeasurementId}`; document.head.appendChild(s);
-    window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments)} window.gtag=gtag; gtag('js',new Date()); gtag('config',cfg.gaMeasurementId);
-  }
+  }, { threshold: .12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 })();
