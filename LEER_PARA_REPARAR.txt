@@ -1,0 +1,34 @@
+REPARACIÓN DEL REPOSITORIO lic-cosentino
+=========================================
+
+Este paquete está armado con la estructura correcta:
+
+RAÍZ DEL REPOSITORIO
+- index.html
+- styles.css
+- script.js
+- config.js
+- assets/
+- demás archivos del ebook "Antes de Comprar"
+
+CARPETA SEPARADA
+- gastos-previos/
+    - index.html
+    - styles.css
+    - script.js
+    - config.js
+    - assets/
+
+RESULTADO ESPERADO
+
+Primer ebook:
+https://carlosbcosentino-source.github.io/lic-cosentino/
+
+Segundo ebook:
+https://carlosbcosentino-source.github.io/lic-cosentino/gastos-previos/
+
+IMPORTANTE:
+- No subas los archivos del segundo ebook sueltos a la raíz.
+- La carpeta "gastos-previos" debe verse como una carpeta independiente dentro del repositorio.
+- El segundo ebook está configurado a $19.500 ARS.
+- Mercado Pago del segundo ebook: https://mpago.la/1heNnR9
